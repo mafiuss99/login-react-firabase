@@ -1,6 +1,10 @@
+import ThemeDefault from "../../themes/ThemeDefault";
+
 const NotFound = () => {
     return (
-        <div>404</div>
+        <ThemeDefault>
+            <div>404</div>
+        </ThemeDefault>    
     )
 }
 

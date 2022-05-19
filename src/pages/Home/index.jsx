@@ -1,7 +1,13 @@
+import ThemeDefault from "../../themes/ThemeDefault";
+
 const Home = () => {
     return (
-        <h2>Olá</h2>
+        <ThemeDefault>
+            <div>
+                <h2>Página Home</h2>
+            </div>
+        </ThemeDefault>
     )
 }
 
-export default Home;
+export default Home;    
