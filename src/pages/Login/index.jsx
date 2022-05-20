@@ -3,15 +3,18 @@ import { auth, loginUser } from "../../data/Firebase";
 
 import { BtnPrimary } from "../../styles/Buttons";
 import { TraditionalInput } from "../../styles/Inputs";
-import { TextBtn1, Title3 } from "../../styles/Typography";
+import { TextBtn1, TextError, Title3 } from "../../styles/Typography";
 
 import { ReactComponent as Loader1 } from "../../assets/svgs/loader1.svg";
 import ThemeAuth from "../../themes/ThemeAuth";
-import { LoginBox } from "../../styles/Box";
+import { FormControl, LoginBox } from "../../styles/Box";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import useFormValidator from "../../hooks/useFormValidator";
 
 const Login = () => {
+  const { Yup, setSchema, validate, textFieldErrorHandler } =
+    useFormValidator();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -20,8 +23,15 @@ const Login = () => {
 
   const { setToken, token } = useContext(AuthContext);
 
-  const handleLogin = () => {
-    if (!isLoading && auth && email && password) {
+  setSchema({
+    email: Yup.string().required().email(),
+    password: Yup.string().required(),
+  });
+
+  const handleLogin = async () => {
+    if (!isLoading && auth) {
+      if (!(await validate({ email, password }))) return;
+
       setIsLoading(true);
 
       loginUser(auth, email, password)
@@ -40,18 +50,26 @@ const Login = () => {
     <ThemeAuth>
       <LoginBox>
         <Title3>Login</Title3>
-        <TraditionalInput
-          type="text"
-          placeholder="Digite seu email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TraditionalInput
-          type="password"
-          placeholder="Digite sua senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <FormControl>
+          <TraditionalInput
+            type="text"
+            placeholder="Digite seu email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            {...textFieldErrorHandler("email")}
+          />
+          {textFieldErrorHandler("email")?.helperText}
+        </FormControl>
+        <FormControl>
+          <TraditionalInput
+            type="password"
+            placeholder="Digite sua senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            {...textFieldErrorHandler("password")}
+          />
+          {textFieldErrorHandler("password")?.helperText}
+        </FormControl>
         <BtnPrimary onClick={handleLogin}>
           {!isLoading ? <TextBtn1>Entrar</TextBtn1> : <Loader1 />}
         </BtnPrimary>

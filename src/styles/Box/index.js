@@ -4,6 +4,7 @@ export const LoginBox = styled.div`
     background-color: white;
     border-radius: 6px;
     max-width: 400px;
+    width: 100%;
     margin: 0 auto;
     padding: 48px 36px;
 
@@ -33,4 +34,8 @@ export const LoginBox = styled.div`
         font-size: 12px;
         text-transform: uppercase;
     }
+`
+
+export const FormControl = styled.div`
+    margin-bottom: 36px;
 `
